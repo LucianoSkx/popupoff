@@ -1,6 +1,6 @@
 # PopUpOFF
 
-[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-PopUpOFF-670000)](https://greasyfork.org/users/Luciano.Oliveirals)
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-PopUpOFF-670000)](https://greasyfork.org/pt-BR/scripts/587461-popupoff)
 
 Userscript that removes popups, overlays, and fixed elements from websites. Based on the [PopUpOFF browser extension](https://github.com/RomanistHere/PopUpOFF) by RomanistHere.
 
@@ -9,7 +9,7 @@ Remove popups, overlays e elementos fixos de sites. Baseado na extensão PopUpOF
 ## Install / Instalação
 
 1. Install [Violentmonkey](https://violentmonkey.github.io/) or [Tampermonkey](https://www.tampermonkey.net/)
-2. [Click here to install](https://greasyfork.org/users/Luciano.Oliveirals) (Greasy Fork)
+2. [Click here to install](https://greasyfork.org/pt-BR/scripts/587461-popupoff) (Greasy Fork)
 
 Or copy `popupoff.user.js` into a new script in your userscript manager.
 
