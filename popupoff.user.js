@@ -14,8 +14,8 @@
 // @grant        GM_registerMenuCommand
 // @match        *://*/*
 // @icon         https://icons.iconarchive.com/icons/paomedia/small-n-flat/64/shield-warning-icon.png
-// @supportURL   https://greasyfork.org/users/Luciano.Oliveirals
-// @homepageURL  https://github.com/LucianoSkx/recaptcha-blocker
+// @supportURL   https://greasyfork.org/scripts/587461-popupoff
+// @homepageURL  https://github.com/LucianoSkx/popupoff
 // ==/UserScript==
 
 ;(function () {
