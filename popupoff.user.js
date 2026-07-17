@@ -9,7 +9,9 @@
 // @author       Luciano.Oliveirals
 // @license      Apache-2.0
 // @run-at       document-end
-// @grant        none
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_registerMenuCommand
 // @match        *://*/*
 // @icon         https://icons.iconarchive.com/icons/paomedia/small-n-flat/64/shield-warning-icon.png
 // @supportURL   https://greasyfork.org/users/Luciano.Oliveirals
@@ -20,8 +22,6 @@
     'use strict'
 
     if (window !== window.parent) return
-
-    const SETTINGS_KEY = 'popupoff_settings'
 
     const defaultSettings = {
         mode: 'moderate',
@@ -327,11 +327,11 @@
     }
 
     const getSettings = () => {
-        try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || { ...defaultSettings } }
+        try { return JSON.parse(GM_getValue('settings', '{}')) || { ...defaultSettings } }
         catch (e) { return { ...defaultSettings } }
     }
 
-    const saveSettings = s => localStorage.setItem(SETTINGS_KEY, JSON.stringify(s))
+    const saveSettings = s => GM_setValue('settings', JSON.stringify(s))
 
     const modes = {
         aggressive: aggressiveMode,
@@ -431,4 +431,17 @@
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init)
     else init()
+
+    GM_registerMenuCommand('Modo: Moderado', () => {
+        const s = getSettings(); s.mode = 'moderate'; saveSettings(s); startMode('moderate'); updateWidget('moderate')
+    })
+    GM_registerMenuCommand('Modo: Agressivo', () => {
+        const s = getSettings(); s.mode = 'aggressive'; saveSettings(s); startMode('aggressive'); updateWidget('aggressive')
+    })
+    GM_registerMenuCommand('Modo: Delicado', () => {
+        const s = getSettings(); s.mode = 'delicate'; saveSettings(s); startMode('delicate'); updateWidget('delicate')
+    })
+    GM_registerMenuCommand('Modo: OFF', () => {
+        const s = getSettings(); s.mode = 'whitelist'; saveSettings(s); startMode('whitelist'); updateWidget('whitelist')
+    })
 })()
