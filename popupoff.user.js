@@ -346,31 +346,86 @@
         if (modes[modeName]) modes[modeName]()
     }
 
+    const modeNames = {
+        aggressive: { en: 'Aggressive', pt: 'Agressivo' },
+        moderate: { en: 'Moderate', pt: 'Moderado' },
+        delicate: { en: 'Delicate', pt: 'Delicado' },
+        whitelist: { en: 'OFF', pt: 'OFF' },
+    }
+
+    const modesList = ['moderate', 'aggressive', 'delicate', 'whitelist']
+
+    let widget = null
+
+    const createWidget = curMode => {
+        const existing = document.getElementById('popupoff-widget')
+        if (existing) existing.remove()
+
+        widget = document.createElement('div')
+        widget.id = 'popupoff-widget'
+        widget.setAttribute('data-popupoff', 'notification')
+
+        const label = modeNames[curMode]?.pt || curMode
+        widget.innerHTML = '<span style="font-weight:700">PopUpOFF</span> <span id="popupoff-mode-label" style="opacity:.8">' + label + '</span>'
+
+        widget.style.cssText =
+            'position:fixed;bottom:20px;right:20px;z-index:999999;' +
+            'background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:20px;' +
+            'font:13px/1.4 sans-serif;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35);' +
+            'user-select:none;transition:opacity .3s'
+
+        widget.addEventListener('click', cycleMode)
+        widget.addEventListener('mouseenter', () => { widget.style.opacity = '1' })
+        widget.addEventListener('mouseleave', () => { widget.style.opacity = '.85' })
+        widget.style.opacity = '.85'
+
+        document.body.appendChild(widget)
+    }
+
+    const updateWidget = mode => {
+        const label = document.getElementById('popupoff-mode-label')
+        if (label) label.textContent = modeNames[mode]?.pt || mode
+    }
+
+    const cycleMode = () => {
+        const settings = getSettings()
+        const idx = modesList.indexOf(settings.mode)
+        const nextMode = modesList[(idx + 1) % modesList.length]
+        settings.mode = nextMode
+        saveSettings(settings)
+        startMode(nextMode)
+        updateWidget(nextMode)
+
+        const n = document.createElement('div')
+        n.textContent = 'PopUpOFF: ' + (modeNames[nextMode]?.pt || nextMode)
+        n.style.cssText =
+            'position:fixed;top:20px;left:50%;transform:translateX(-50%);' +
+            'background:#1a1a2e;color:#fff;padding:10px 24px;border-radius:20px;' +
+            'z-index:999999;font:14px sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.3);' +
+            'animation:popupoff-fade 2.5s forwards'
+        document.body.appendChild(n)
+        setTimeout(() => n.remove(), 2500)
+    }
+
+    const styleSheet = document.createElement('style')
+    styleSheet.textContent =
+        '@keyframes popupoff-fade{0%{opacity:1;transform:translateX(-50%) translateY(0)}' +
+        '70%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-20px)}}'
+    document.head.appendChild(styleSheet)
+
     const init = () => {
         const url = getPureURL()
         if (whitelist.includes(url)) return
 
         const settings = getSettings()
         startMode(settings.mode)
+        createWidget(settings.mode)
     }
 
     document.addEventListener('keydown', e => {
         if ((e.altKey && e.key === 'x') || (e.metaKey && e.shiftKey && e.key === 'X')) {
             e.preventDefault()
-            const settings = getSettings()
-            const modesList = ['moderate', 'aggressive', 'delicate', 'whitelist']
-            const idx = modesList.indexOf(settings.mode)
-            const nextMode = modesList[(idx + 1) % modesList.length]
-            settings.mode = nextMode
-            saveSettings(settings)
-            startMode(nextMode)
-            const names = { moderate: 'Moderate', aggressive: 'Aggressive', delicate: 'Delicate', whitelist: 'OFF' }
-            const n = document.createElement('span')
-            n.setAttribute('data-popupoff', 'notification')
-            n.textContent = 'PopUpOFF: ' + names[nextMode]
-            n.style.cssText = 'position:fixed;top:20px;right:20px;background:#222;color:#fff;padding:12px 20px;border-radius:8px;z-index:999999;font:14px sans-serif;box-shadow:0 2px 12px rgba(0,0,0,0.3)'
-            document.body.appendChild(n)
-            setTimeout(() => n.remove(), 3000)
+            cycleMode()
         }
     })
 
