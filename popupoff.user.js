@@ -320,8 +320,10 @@
 
     const restoreFixedElems = () => {
         document.querySelectorAll('[data-popupoff]').forEach(el => {
-            if (el.getAttribute('data-popupoff') === 'bl') el.style.display = null
-            else if (el.getAttribute('data-popupoff') === 'st') el.style.setProperty('position', 'absolute')
+            const attr = el.getAttribute('data-popupoff')
+            if (attr === 'notification') return
+            if (attr === 'bl') el.style.display = null
+            else if (attr === 'st') el.style.setProperty('position', 'absolute')
             el.removeAttribute('data-popupoff')
         })
     }
@@ -365,26 +367,20 @@
         widget.id = 'popupoff-widget'
         widget.setAttribute('data-popupoff', 'notification')
 
-        const label = modeNames[curMode]?.pt || curMode
-        widget.innerHTML = '<span style="font-weight:700">PopUpOFF</span> <span id="popupoff-mode-label" style="opacity:.8">' + label + '</span>'
+        widget.textContent = 'PopUpOFF - ' + (modeNames[curMode]?.pt || curMode)
 
         widget.style.cssText =
             'position:fixed;bottom:20px;right:20px;z-index:999999;' +
             'background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:20px;' +
             'font:13px/1.4 sans-serif;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35);' +
-            'user-select:none;transition:opacity .3s'
+            'user-select:none'
 
         widget.addEventListener('click', cycleMode)
-        widget.addEventListener('mouseenter', () => { widget.style.opacity = '1' })
-        widget.addEventListener('mouseleave', () => { widget.style.opacity = '.85' })
-        widget.style.opacity = '.85'
-
         document.body.appendChild(widget)
     }
 
     const updateWidget = mode => {
-        const label = document.getElementById('popupoff-mode-label')
-        if (label) label.textContent = modeNames[mode]?.pt || mode
+        if (widget) widget.textContent = 'PopUpOFF - ' + (modeNames[mode]?.pt || mode)
     }
 
     const cycleMode = () => {
