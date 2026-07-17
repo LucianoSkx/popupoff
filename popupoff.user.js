@@ -419,7 +419,7 @@
     }
 
     document.addEventListener('keydown', e => {
-        if ((e.altKey && e.key === 'x') || (e.metaKey && e.shiftKey && e.key === 'X')) {
+        if (e.altKey && e.key.toLowerCase() === 'x') {
             e.preventDefault()
             cycleMode()
         }
