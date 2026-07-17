@@ -357,6 +357,32 @@
 
     const modesList = ['moderate', 'aggressive', 'delicate', 'whitelist']
 
+    let widget = null
+
+    const updateWidget = mode => {
+        if (widget) widget.textContent = modeNames[mode]?.pt || mode
+    }
+
+    const createWidget = curMode => {
+        const existing = document.getElementById('popupoff-widget')
+        if (existing) existing.remove()
+
+        widget = document.createElement('div')
+        widget.id = 'popupoff-widget'
+        widget.setAttribute('data-popupoff', 'notification')
+
+        widget.textContent = modeNames[curMode]?.pt || curMode
+
+        widget.style.cssText =
+            'position:fixed;bottom:20px;right:20px;z-index:999999;' +
+            'background:#1a1a2e;color:#fff;padding:8px 16px;border-radius:20px;' +
+            'font:13px/1.4 sans-serif;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,.35);' +
+            'user-select:none'
+
+        widget.addEventListener('click', cycleMode)
+        document.body.appendChild(widget)
+    }
+
     const cycleMode = () => {
         const settings = getSettings()
         const idx = modesList.indexOf(settings.mode)
@@ -364,6 +390,7 @@
         settings.mode = nextMode
         saveSettings(settings)
         startMode(nextMode)
+        updateWidget(nextMode)
 
         const n = document.createElement('div')
         n.textContent = 'PopUpOFF: ' + (modeNames[nextMode]?.pt || nextMode)
@@ -388,6 +415,7 @@
 
         const settings = getSettings()
         startMode(settings.mode)
+        createWidget(settings.mode)
     }
 
     document.addEventListener('keydown', e => {
@@ -401,15 +429,15 @@
     else init()
 
     GM_registerMenuCommand('Modo: Moderado', () => {
-        const s = getSettings(); s.mode = 'moderate'; saveSettings(s); startMode('moderate')
+        const s = getSettings(); s.mode = 'moderate'; saveSettings(s); startMode('moderate'); updateWidget('moderate')
     })
     GM_registerMenuCommand('Modo: Agressivo', () => {
-        const s = getSettings(); s.mode = 'aggressive'; saveSettings(s); startMode('aggressive')
+        const s = getSettings(); s.mode = 'aggressive'; saveSettings(s); startMode('aggressive'); updateWidget('aggressive')
     })
     GM_registerMenuCommand('Modo: Delicado', () => {
-        const s = getSettings(); s.mode = 'delicate'; saveSettings(s); startMode('delicate')
+        const s = getSettings(); s.mode = 'delicate'; saveSettings(s); startMode('delicate'); updateWidget('delicate')
     })
     GM_registerMenuCommand('Modo: OFF', () => {
-        const s = getSettings(); s.mode = 'whitelist'; saveSettings(s); startMode('whitelist')
+        const s = getSettings(); s.mode = 'whitelist'; saveSettings(s); startMode('whitelist'); updateWidget('whitelist')
     })
 })()
