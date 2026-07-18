@@ -2,7 +2,7 @@
 // @name         PopUpOFF
 // @name:en      PopUpOFF
 // @name:pt-BR   PopUpOFF
-// @namespace    https://greasyfork.org/users/Luciano.Oliveirals
+// @namespace    https://github.com/LucianoSkx/popupoff
 // @version      1.0.0
 // @description  Removes popups, overlays, and fixed elements from websites. Based on PopUpOFF browser extension by RomanistHere. Modes: Aggressive, Moderate, Delicate.
 // @description:pt-BR  Remove popups, overlays e elementos fixos de sites. Baseado na extensão PopUpOFF de RomanistHere. Modos: Agressivo, Moderado, Delicado.
