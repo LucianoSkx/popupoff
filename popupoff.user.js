@@ -3,7 +3,7 @@
 // @name:en      PopUpOFF
 // @name:pt-BR   PopUpOFF
 // @namespace    https://greasyfork.org/en/users/1301195-luciano-inf
-// @version      1.0.0
+// @version      1.0.1
 // @description  Removes popups, overlays, and fixed elements from websites. Based on PopUpOFF browser extension by RomanistHere. Modes: Aggressive, Moderate, Delicate.
 // @description:pt-BR  Remove popups, overlays e elementos fixos de sites. Baseado na extensão PopUpOFF de RomanistHere. Modos: Agressivo, Moderado, Delicado.
 // @author       Luciano.Oliveirals
@@ -11,7 +11,6 @@
 // @run-at       document-end
 // @grant        GM_setValue
 // @grant        GM_getValue
-// @grant        GM_registerMenuCommand
 // @match        *://*/*
 // @icon         https://icons.iconarchive.com/icons/paomedia/small-n-flat/64/shield-warning-icon.png
 // @supportURL   https://greasyfork.org/scripts/587461-popupoff
@@ -428,16 +427,5 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init)
     else init()
 
-    GM_registerMenuCommand('Modo: Moderado', () => {
-        const s = getSettings(); s.mode = 'moderate'; saveSettings(s); startMode('moderate'); updateWidget('moderate')
-    })
-    GM_registerMenuCommand('Modo: Agressivo', () => {
-        const s = getSettings(); s.mode = 'aggressive'; saveSettings(s); startMode('aggressive'); updateWidget('aggressive')
-    })
-    GM_registerMenuCommand('Modo: Delicado', () => {
-        const s = getSettings(); s.mode = 'delicate'; saveSettings(s); startMode('delicate'); updateWidget('delicate')
-    })
-    GM_registerMenuCommand('Modo: OFF', () => {
-        const s = getSettings(); s.mode = 'whitelist'; saveSettings(s); startMode('whitelist'); updateWidget('whitelist')
-    })
+
 })()
